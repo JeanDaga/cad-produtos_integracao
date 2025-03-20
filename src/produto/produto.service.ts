@@ -2,38 +2,43 @@ import { Injectable } from '@nestjs/common';
 import { CreateProdutoDto } from './dto/create-produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
 import { Produto } from './entities/produto.entity';
+import { PrismaService } from 'prisma/prisma.service';
 
 @Injectable()
 export class ProdutoService {
 
-private produtos : Produto[] = [
-  {
-    id:1,
-    nome:'RTX 7090Ti super ProMax',
-    preco: 30000,
-    qtdStock: 4,
-    categoria:'Placa de Video'
-  },
-  {
-    id:2,
-    nome:'mouse',
-    preco:50,
-    qtdStock: 45,
-    categoria:'Perefericos'
-  }
-];
+constructor (private prisma: PrismaService){
 
-  create(createProdutoDto: CreateProdutoDto) {
-    return 'This action adds a new produto';
+}
+
+
+
+  async create(createProdutoDto: CreateProdutoDto): Promise<Produto> {
+    const produto = await this.prisma.produto.create({
+      data: createProdutoDto
+    })
+    return this.mapToEntity(produto);
   }
 
-  findAll() {
-    return this.produtos;
+  async findAll(): Promise<Produto[]> {
+    const produtos = await this.prisma.produto.findMany();
+    return produtos.map(produto => this.mapToEntity(produto));
   }
 
-  findOne(id: number): Produto | undefined {
-      return this.produtos.find(produto => produto.id === id);
-    
+  private mapToEntity(produto: any): Produto{
+    return{
+      id: produto.id,
+      nome: produto.nome,
+      preco: produto.preco,
+      qtdStock: produto.qtdStock,
+      categoria: produto.categoria,
+    }
+  }
+
+  async findOne(id: number): Promise<Produto | null> {
+    const produto = 
+      await this.prisma.produto.findUnique({where: {id}});
+    return produto ? this.mapToEntity(produto) : null;
   }
 
   update(id: number, updateProdutoDto: UpdateProdutoDto) {
