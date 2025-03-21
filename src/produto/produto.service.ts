@@ -11,8 +11,6 @@ constructor (private prisma: PrismaService){
 
 }
 
-
-
   async create(createProdutoDto: CreateProdutoDto): Promise<Produto> {
     const produto = await this.prisma.produto.create({
       data: createProdutoDto
@@ -21,7 +19,11 @@ constructor (private prisma: PrismaService){
   }
 
   async findAll(): Promise<Produto[]> {
-    const produtos = await this.prisma.produto.findMany();
+    const produtos = await this.prisma.produto.findMany({
+      orderBy: [{
+        id: 'asc'
+      }]
+    });
     return produtos.map(produto => this.mapToEntity(produto));
   }
 
@@ -41,11 +43,18 @@ constructor (private prisma: PrismaService){
     return produto ? this.mapToEntity(produto) : null;
   }
 
-  update(id: number, updateProdutoDto: UpdateProdutoDto) {
-    return `This action updates a #${id} produto`;
+  async update(id: number, updateProdutoDto: UpdateProdutoDto): Promise<Produto> {
+    const produto = await this.prisma.produto.update({
+      where: {id},
+      data: updateProdutoDto
+    })
+    return this.mapToEntity(produto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} produto`;
+  async remove(id: number):Promise<Produto> {
+    const produto = await this.prisma.produto.delete({
+      where:{id}
+    })
+    return this.mapToEntity(produto);
   }
 }
