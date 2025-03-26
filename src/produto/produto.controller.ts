@@ -1,11 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Headers, UnauthorizedException } from '@nestjs/common';
 import { ProdutoService } from './produto.service';
 import { CreateProdutoDto } from './dto/create-produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller('produto')
 export class ProdutoController {
-  constructor(private readonly produtoService: ProdutoService) {}
+  constructor(
+    private readonly produtoService: ProdutoService, 
+    private readonly authService: AuthService 
+  ) {}
 
   @Post()
   create(@Body() createProdutoDto: CreateProdutoDto) {
@@ -13,7 +17,11 @@ export class ProdutoController {
   }
 
   @Get()
-  findAll() {
+  findAll(@Headers('x-api-token') token: string) {
+    if(!token) throw new UnauthorizedException('Token não enviado');
+
+    this.authService.validateToken(token);
+
     return this.produtoService.findAll();
   }
 
