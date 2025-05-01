@@ -3,15 +3,15 @@ import { Type } from "class-transformer";
 
 
 export class CreateProdutoDto {
-    @IsString()
+    @IsString({ message: 'Deve ser um nome válido'})
     nome: string;
 
-    @IsInt()
+    @IsInt({ message: 'Deve ser um preço válido'})
     preco: number;
 
-    @IsInt()
+    @IsInt({ message: 'Deve ser um valor de estoque válido'})
     qtdStock: number;
 
-    @IsString()
+    @IsString({ message: 'Deve ser uma categoria válida'})
     categoria: string;
 }
