@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateProdutoDto } from './dto/create-produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
 import { Produto } from './entities/produto.entity';
 import { PrismaService } from 'prisma/prisma.service';
+
 
 @Injectable()
 export class ProdutoService {
@@ -40,6 +41,10 @@ constructor (private prisma: PrismaService){
   async findOne(id: number): Promise<Produto | null> {
     const produto = 
       await this.prisma.produto.findUnique({where: {id}});
+      /* IF produto = null return throw HTTP status 404 */
+    if (produto === null) {
+      throw new HttpException('NotFound', HttpStatus.NOT_FOUND);
+    }
     return produto ? this.mapToEntity(produto) : null;
   }
 
