@@ -41,7 +41,7 @@ constructor (private prisma: PrismaService){
   async findOne(id: number): Promise<Produto | null> {
     const produto = 
       await this.prisma.produto.findUnique({where: {id}});
-      /* IF produto = null return throw HTTP status 404 */
+    /* IF produto = null return throw HTTP status 404 */
     if (produto === null) {
       throw new HttpException('NotFound', HttpStatus.NOT_FOUND);
     }
