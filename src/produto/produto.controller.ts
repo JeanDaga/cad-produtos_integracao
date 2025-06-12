@@ -12,43 +12,43 @@ export class ProdutoController {
   ) {}
 
   @Post()
-  create(@Body() createProdutoDto: CreateProdutoDto, @Headers('x-api-token') token: string) {
-    if(!token) throw new UnauthorizedException('Token não enviado');
+  create(@Body() createProdutoDto: CreateProdutoDto/*, @Headers('x-api-token') token: string*/) {
+    //if(!token) throw new UnauthorizedException('Token não enviado');
 
-    this.authService.validateToken(token);
+    //this.authService.validateToken(token);
     return this.produtoService.create(createProdutoDto);
   }
 
   @Get()
-  findAll(@Headers('x-api-token') token: string) {
-    if(!token) throw new UnauthorizedException('Token não enviado');
+  findAll(/*@Headers('x-api-token') token: string*/) {
+    //if(!token) throw new UnauthorizedException('Token não enviado');
 
-    this.authService.validateToken(token);
+    //this.authService.validateToken(token);
 
     return this.produtoService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @Headers('x-api-token') token: string) {
-    if(!token) throw new UnauthorizedException('Token não enviado');
+  findOne(@Param('id') id: string/*, @Headers('x-api-token') token: string*/) {
+    //if(!token) throw new UnauthorizedException('Token não enviado');
 
-    this.authService.validateToken(token);
+    //this.authService.validateToken(token);
     return this.produtoService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProdutoDto: UpdateProdutoDto, @Headers('x-api-token') token: string) {
-    if(!token) throw new UnauthorizedException('Token não enviado');
+  update(@Param('id') id: string, @Body() updateProdutoDto: UpdateProdutoDto/*, @Headers('x-api-token') token: string*/) {
+    //if(!token) throw new UnauthorizedException('Token não enviado');
 
-    this.authService.validateToken(token);
+    //this.authService.validateToken(token);
     return this.produtoService.update(+id, updateProdutoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @Headers('x-api-token') token: string) {
-    if(!token) throw new UnauthorizedException('Token não enviado');
+  remove(@Param('id') id: string/*, @Headers('x-api-token') token: string*/) {
+    //if(!token) throw new UnauthorizedException('Token não enviado');
 
-    this.authService.validateToken(token);
+    //this.authService.validateToken(token);
     return this.produtoService.remove(+id);
   }
 }
